@@ -10,6 +10,7 @@ import { BACKEND_URL } from '../../utilities/backend-constants';
 import { format } from 'date-fns';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { openModal } from '../../redux/features/modalSlice';
+import AddOrEditReminderModal from '../modal/modal-forms/add-or-edit-reminder';
 
 const Today = new Date();
 const MinDate = new Date();
@@ -36,7 +37,6 @@ const CalendarMemories = () => {
 
   const dispatch = useAppDispatch();
   const store = useAppSelector((st)=>st.modal);
-  console.log({store});
 
   const isHoliday = (date: Date): boolean => {
     const dateString = format(date,'yyyy-MM-dd');
@@ -76,7 +76,7 @@ const CalendarMemories = () => {
          onChange={(val:Value)=> {
           setState((prev)=>({...prev,value:val}));
 
-          dispatch(openModal({modalType:"add", modalName:'reminder'}));
+          dispatch(openModal({modalType:"add", modalName:'reminder',content:<AddOrEditReminderModal/>}));
          }}
          value={state.value}
          className={"mCalendar"}

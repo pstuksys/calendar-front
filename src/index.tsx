@@ -4,6 +4,7 @@ import '../public/index.css';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import Modal from 'react-modal';
+import Layout from './Layout';
 
 const rootElement = document.getElementById('root');
 Modal.setAppElement('#root');
@@ -14,9 +15,12 @@ if (!rootElement) {
   
   const root = ReactDOM.createRoot(rootElement);
 
+  
   root.render(
     <Provider store={store}>
-      <App />
+      <Layout>
+        <App />
+      </Layout>
     </Provider>
   );
 

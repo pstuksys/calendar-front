@@ -2,6 +2,8 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
 import { closeModal } from '../../../../redux/features/modalSlice';
 import styled from 'styled-components';
 import { Strings } from './strings';
+import CustomTimePicker from '../../../custom/time-picker';
+import { CssStyles } from '../styles';
 
 const AddOrEditReminderModal = () => {
   const store = useAppSelector((st)=>st.modal);
@@ -37,9 +39,20 @@ const AddOrEditReminderModal = () => {
           </div>
         </div>
 
+        <div className="row row_one">
+         <CustomTimePicker 
+            onChange={(val)=>{console.log(val)}}
+            // onError={(err)=>setState((prev)=>({...prev,error:err}))}
+            minTime={{hours:0,minutes:15}} 
+            maxTime={{hours:24,minutes:0}}
+            interval={1}
+            title='Laikas'
+   />
+        </div>
+
         <div className="container_actions">
-          <button type='button' onClick={handleClose}>{Strings.btnClose}</button>
           <button type='submit'>{Strings.btnSubmit}</button>
+          <button type='button' onClick={handleClose}>{Strings.btnClose}</button>
         </div>
     </FormContainer>
   )
@@ -48,34 +61,5 @@ const AddOrEditReminderModal = () => {
 export default AddOrEditReminderModal
 
 const FormContainer = styled.form`
-  width:350px;
-  max-width:100%;
-  overflow: hidden;
-  .container{
-    width:100%;
-    max-width:100%;
-    display: flex;
-    flex-direction: column;
-  }
-  .modal_title {
-    padding:0 0 20px 0;
-    display: flex;
-    font:25px/28px bold Roboto;
-    align-items: center;
-    justify-content: center;
-  }
-  .row{
-    width:100%;
-    max-width:100%;
-    gap:20px;
-    >label{
-      display:flex;
-      flex-direction: column;
-    }
-  }
-  .container_actions{
-    display:flex;
-    gap:10px;
-    flex-direction: row-reverse;
-  }
+  ${CssStyles}
 `

@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import Modal from 'react-modal';
 import Layout from './Layout';
+import CustomLocalizationProvider from './components/custom/localization-provider';
 
 const rootElement = document.getElementById('root');
 Modal.setAppElement('#root');
@@ -17,11 +18,13 @@ if (!rootElement) {
 
   
   root.render(
+   <CustomLocalizationProvider>
     <Provider store={store}>
       <Layout>
         <App />
       </Layout>
     </Provider>
+   </CustomLocalizationProvider>
   );
 
   

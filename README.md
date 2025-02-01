@@ -4,3 +4,7 @@ READ ME FILE BEFORE STARTING:
 2. run 'npm install'
 3. run 'npm start'. and check: 'http://localhost:3000/'
 
+
+
+TODO:
+toast messages would be nice.

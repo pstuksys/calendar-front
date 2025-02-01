@@ -1,23 +1,6 @@
 import { Dayjs } from "dayjs";
 import * as Yup from 'yup';
 
-
-// export  type CustomObjectShape<T> = {
-//     [key in keyof T]: T[key] extends string
-//     ? Yup.StringSchema
-//     : T[key] extends number
-//     ? Yup.NumberSchema
-//     : T[key] extends Date
-//     ? Yup.DateSchema
-//     : T[key] extends Array<any>
-//     ? Yup.ArraySchema<any,any>
-//     : T[key] extends boolean
-//     ? Yup.BooleanSchema
-//     : T[key] extends object
-//     ? Yup.ObjectSchema<any>
-//     : any;
-//   };
-
 /**@info : https://dev.to/jpoehnelt/strongly-typed-yup-schema-in-typescript-15bc */
 export type CustomObjectShape<T> = T extends string
   ? Yup.StringSchema

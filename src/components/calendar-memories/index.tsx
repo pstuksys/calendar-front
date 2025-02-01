@@ -76,7 +76,7 @@ const CalendarMemories = () => {
          onChange={(val:Value)=> {
           setState((prev)=>({...prev,value:val}));
 
-          dispatch(openModal({modalType:"add", modalName:'reminder',content:<AddOrEditReminderModal/>}));
+          dispatch(openModal({modalType:"add", modalName:'reminder',content:<AddOrEditReminderModal/>, extraProps: { Date: val }}));
          }}
          value={state.value}
          className={"mCalendar"}

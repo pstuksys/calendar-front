@@ -68,11 +68,11 @@ const CustomTimePicker = (props:NMuiProps.props) => {
   const startTime=dayjs().hour(minTime?.hours || 0).minute(minTime?.minutes || 0);
   const endTime = dayjs().hour(maxTime?.hours || 24).minute(maxTime?.hours || 0)
 
-
   return (
     <Container>
       <ThemeProvider theme={theme}>
-        <TimePicker label={title || "Basic time picker"} 
+        <TimePicker label={title || "Basic time picker"}
+        className="" 
           defaultValue={defaultValue}
           disableIgnoringDatePartForTimeValidation
           ampm={false} 
@@ -99,5 +99,7 @@ const CustomTimePicker = (props:NMuiProps.props) => {
 export default CustomTimePicker
 
 const Container = styled.div`
-  /*  */
+ .errMsg{
+    color:#d32f2f;
+ }
 `

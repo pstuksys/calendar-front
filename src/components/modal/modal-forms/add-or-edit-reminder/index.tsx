@@ -10,19 +10,23 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ValidationSchema } from './validation';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import { CircularProgress } from '@mui/material';
+import React from 'react';
 
 const DefaultValues:NForms.TReminders = {
   about:'',
   name:'',
   date:null,
   time:null
-  // date:dayjs().toDate(),
-  // time:dayjs()
 }
 
 const AddOrEditReminderModal = () => {
   const store = useAppSelector((st)=>st.modal);
   const dispatch = useAppDispatch();
+
+  const selectedDate = store.extraProps as {Date:Date};
+
+  console.log({store})
 
   const title = store.modalType === 'add' ? Strings.addTitle : Strings.editTitle;
 
@@ -38,11 +42,21 @@ const AddOrEditReminderModal = () => {
   })
 
   const handleSubmit = form.handleSubmit((values)=>{
+    // might consider adding useState for loading if the api implementation wont cause spinning.
     console.log('submited',values);
+    handleClose()
   });
 
+  React.useEffect(()=>{
+    if(selectedDate.Date){
+      form.reset({
+        ...DefaultValues,
+        date:selectedDate.Date
+      })
+    }
+  },[selectedDate.Date])
 
-  console.log({errors:form.formState.errors});
+
 
   return (
     <FormContainer id="AddOrEditReminderModal"
@@ -54,30 +68,17 @@ const AddOrEditReminderModal = () => {
           </div>
           
           <div className="row">
-            {/* <label htmlFor='name'>{Strings.name}
-              <Controller 
-                control={form.control}
-                name='name'
-                render={({field,formState})=>{
-                  console.log({field,formState});
-                  return(
-                    <Input title={Strings.name} type='text' id='name' {...field} />
-                  )
-                }}
-              />
-            </label> */}
              <Controller 
                 control={form.control}
                 name='name'
                 render={({field,formState})=>{
                   return(
                     <TextField
-                      // required
                       {...field}
                       id="name"
-                      label={Strings.name}
-                      defaultValue={Strings.name}
+                      label={`${Strings.name}*`}
                       error={!!formState.errors.name?.message}
+                      helperText={!!formState.errors.name?.message ? formState.errors.name?.message : ""}
                       type='text'
                     />
                   )
@@ -92,40 +93,48 @@ const AddOrEditReminderModal = () => {
                   render={({field,formState})=>{
                     return(
                       <TextField
-                        // required
                         {...field}
                         id="about"
-                        label={Strings.about}
-                        defaultValue={Strings.about}
+                        label={`${Strings.about}*`}
                         error={!!formState.errors.about?.message}
                         type='text'
                         multiline
-                        onError={()=>(<div>testas</div>)}
+                        helperText={!!formState.errors.about?.message ? formState.errors.about?.message : ""}
                       />
-                      // <Input multiline title={Strings.about} type='text' id='about' {...field} error={!!formState.errors.about?.message} placeholder={Strings.about} />
                     )
                   }}
                 />
-            {/* <label htmlFor='about'>{Strings.about}
-              <Input multiline={true} type='text' id='about' />
-            </label> */}
           </div>
         </div>
 
         <div className="row row_one">
-         <CustomTimePicker 
-            onChange={(val)=>{console.log(val)}}
-            // onError={(err)=>setState((prev)=>({...prev,error:err}))}
-            minTime={{hours:0,minutes:15}} 
-            maxTime={{hours:24,minutes:0}}
-            interval={1}
-            title='Laikas'
-   />
+          <Controller
+            control={form.control}
+            name='time'
+            render={({field,formState})=>{
+              return (
+                <CustomTimePicker 
+                  {...field}
+                   onChange={(val)=>{field.onChange(val)}}
+                   errorMsg={formState.errors.time?.message}
+                   minTime={{hours:0,minutes:15}} 
+                   maxTime={{hours:24,minutes:0}}
+                   interval={1}
+                   title={`${Strings.time}*`}
+                 />
+              )
+            }}
+            />
         </div>
 
         <div className="container_actions">
-          <Button type='submit' disabled={!form.formState.isDirty} >{Strings.btnSubmit}</Button>
-          <Button disabled={form.formState.isSubmitting} color='secondary' type='button' onClick={handleClose}>{Strings.btnClose}</Button>
+          <Button startIcon={form.formState.isLoading ? <CircularProgress size={20} /> : null} type='submit' disabled={!form.formState.isDirty || form.formState.isLoading}>
+           {form.formState.isLoading ? '' : Strings.btnSubmit} 
+          </Button>
+
+          <Button disabled={form.formState.isSubmitting} color='secondary' type='button' onClick={handleClose}>
+            {Strings.btnClose}
+          </Button>
         </div>
     </FormContainer>
   )

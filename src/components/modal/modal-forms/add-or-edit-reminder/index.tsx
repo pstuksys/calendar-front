@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { CircularProgress } from '@mui/material';
 import React from 'react';
+import { HandleAddOrUpdateReminder } from './mutation';
 
 const DefaultValues:NForms.TReminders = {
   about:'',
@@ -24,9 +25,7 @@ const AddOrEditReminderModal = () => {
   const store = useAppSelector((st)=>st.modal);
   const dispatch = useAppDispatch();
 
-  const selectedDate = store.extraProps as {Date:Date};
-
-  console.log({store})
+  const extraProps = store.extraProps as {Date:Date, id?:number};
 
   const title = store.modalType === 'add' ? Strings.addTitle : Strings.editTitle;
 
@@ -42,19 +41,23 @@ const AddOrEditReminderModal = () => {
   })
 
   const handleSubmit = form.handleSubmit((values)=>{
-    // might consider adding useState for loading if the api implementation wont cause spinning.
-    console.log('submited',values);
-    handleClose()
+  
+    HandleAddOrUpdateReminder({
+      id:extraProps.id,
+      values,
+      onError:()=>form.setError("time", {message:'Ivyko klaida rodo cia kol nera toast.'}),
+      onSuccess:()=> handleClose()
+    });
   });
 
   React.useEffect(()=>{
-    if(selectedDate.Date){
+    if(extraProps.Date){
       form.reset({
         ...DefaultValues,
-        date:selectedDate.Date
+        date:extraProps.Date
       })
     }
-  },[selectedDate.Date])
+  },[extraProps.Date])
 
 
 
@@ -115,7 +118,7 @@ const AddOrEditReminderModal = () => {
               return (
                 <CustomTimePicker 
                   {...field}
-                   onChange={(val)=>{field.onChange(val)}}
+                   onChange={(val)=>{field.onChange(val);console.log(val)}}
                    errorMsg={formState.errors.time?.message}
                    minTime={{hours:0,minutes:15}} 
                    maxTime={{hours:24,minutes:0}}

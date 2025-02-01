@@ -6,7 +6,7 @@ import { Value } from 'react-calendar/dist/cjs/shared/types';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import axios from 'axios';
-import { BACKEND_URL } from '../../utilities/backend-constants';
+import { BACKEND_URL } from '../../utils/backend-constants';
 import { format } from 'date-fns';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { openModal } from '../../redux/features/modalSlice';

@@ -2,6 +2,7 @@ import {  createTheme, Theme, ThemeProvider } from "@mui/material";
 import { SxProps } from "@mui/system";
 import { TimePicker, TimeValidationError } from "@mui/x-date-pickers"
 import dayjs, { Dayjs } from "dayjs";
+import React from "react";
 import styled from "styled-components"
 
 export namespace NMuiProps {
@@ -51,7 +52,7 @@ const theme = createTheme({
  *   maxTime={{hours:24,minutes:0}}
  *  />
  */
-const CustomTimePicker = (props:NMuiProps.props) => {
+const CustomTimePicker =  React.forwardRef<HTMLDivElement, NMuiProps.props>((props,ref) => {
   const {
     minTime,
     maxTime,
@@ -72,7 +73,8 @@ const CustomTimePicker = (props:NMuiProps.props) => {
     <Container>
       <ThemeProvider theme={theme}>
         <TimePicker label={title || "Basic time picker"}
-        className="" 
+          className="" 
+          ref={ref}
           defaultValue={defaultValue}
           disableIgnoringDatePartForTimeValidation
           ampm={false} 
@@ -93,7 +95,7 @@ const CustomTimePicker = (props:NMuiProps.props) => {
 
     </Container>
   )
-}
+})
 
 
 export default CustomTimePicker

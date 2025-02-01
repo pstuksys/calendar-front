@@ -7,6 +7,13 @@ import Modal from 'react-modal';
 import Layout from './Layout';
 import CustomLocalizationProvider from './components/custom/localization-provider';
 
+import dayjs from 'dayjs';
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const rootElement = document.getElementById('root');
 Modal.setAppElement('#root');
 

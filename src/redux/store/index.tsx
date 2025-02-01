@@ -11,7 +11,7 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: ['modal/openModal'], // non-serializable data : since i pass jsx element in state its not happy.
-        ignoredPaths: ['modal.content'], 
+        ignoredPaths: ['modal.content','modal.extraProps.Date'], 
       },
     }),
 })

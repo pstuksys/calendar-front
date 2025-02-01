@@ -5,5 +5,6 @@ export const Strings = {
     about:'Aprasas',
     btnClose:'Uždaryti',
     btnSubmit:'Patvirtinti',
-    time:"Laikas"
+    time:"Laikas",
+    requiredField:'Privalomas laukas'
 }

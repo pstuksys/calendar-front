@@ -6,7 +6,14 @@ export const store = configureStore({
   reducer: {
     counter: counterReducer,
     modal:modalReducer
-  }
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['modal/openModal'], // non-serializable data : since i pass jsx element in state its not happy.
+        ignoredPaths: ['modal.content'], 
+      },
+    }),
 })
 
 export type RootState = ReturnType<typeof store.getState>

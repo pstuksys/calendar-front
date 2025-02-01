@@ -21,11 +21,12 @@ export const CssStyles = css`
     overflow: hidden;
     width:100%;
     max-width:100%;
+    padding: 10px 0 ;
     gap:20px;
-    >label{
-      display:flex;
-      flex-direction: column;
-    }
+      .MuiFormControl-root{
+        width: 100%;
+        max-width: 100%;
+      }
   }
   .row_one{
     padding:20px 0 0 0;

@@ -4,7 +4,7 @@ import '../public/index.css';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import Modal from 'react-modal';
-import Layout from './Layout';
+import ModalLayout from './ModalLayout';
 import CustomLocalizationProvider from './components/custom/localization-provider';
 
 import dayjs from 'dayjs';
@@ -27,9 +27,9 @@ if (!rootElement) {
   root.render(
    <CustomLocalizationProvider>
     <Provider store={store}>
-      <Layout>
+      <ModalLayout>
         <App />
-      </Layout>
+      </ModalLayout>
     </Provider>
    </CustomLocalizationProvider>
   );

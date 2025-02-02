@@ -4,7 +4,7 @@ import { closeModal } from './redux/features/modalSlice';
 
 const LazyModal = lazy(() => import('./components/modal/index'));
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const ModalLayout = ({ children }: { children: React.ReactNode }) => {
     const store = useAppSelector((st)=>st.modal);
     const dispatch = useAppDispatch();
 
@@ -22,4 +22,4 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     )
 }
 
-export default Layout
+export default ModalLayout

@@ -46,6 +46,7 @@ const AddOrEditReminderModal = () => {
       id:extraProps.id,
       values,
       onError:()=>form.setError("time", {message:'Ivyko klaida rodo cia kol nera toast.'}),
+      // perhaps need trigger to fetch new data in calendar, atm will be needed refresh.
       onSuccess:()=> handleClose()
     });
   });

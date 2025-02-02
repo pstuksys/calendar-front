@@ -5,35 +5,48 @@ import React from 'react';
 import { Value } from 'react-calendar/dist/cjs/shared/types';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import axios from 'axios';
-import { BACKEND_URL } from '../../utils/backend-constants';
 import { format } from 'date-fns';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { openModal } from '../../redux/features/modalSlice';
 import AddOrEditReminderModal from '../modal/modal-forms/add-or-edit-reminder';
+import { FetchNationalHolidays, FetchRemindersWithingYearSpan } from './query';
+import { GetHolidaysLocalStorage } from '../../utils/localstorage/holidays';
 
 const Today = new Date();
 const MinDate = new Date();
 const MaxDate = new Date();
 MaxDate.setFullYear(new Date().getFullYear() + 1)
 
-type THolidays = {
+export type THolidays = {
   date:string;
   localName:string;
   name:string;
 }
 
+export type TRemindersData = {
+  id:number;
+  date:Date;
+  name:string;
+  about:string;
+  time:string;
+}
+
 type TState = {
   value:Value;
   holidays:THolidays[];
+  reminders :TRemindersData[];
 }
 
-const DefaultState = {
-  value:Today, holidays:[]
+const DefaultState:TState = {
+  value:Today,
+  holidays:[],
+  reminders:[]
 }
 
 const CalendarMemories = () => {
   const [state, setState] = React.useState<TState>(DefaultState);
+
+  const storageHolidaysData = GetHolidaysLocalStorage();
 
   const dispatch = useAppDispatch();
   const store = useAppSelector((st)=>st.modal);
@@ -54,25 +67,29 @@ const CalendarMemories = () => {
     return `${date.getDate()}`;
   };
 
-  React.useEffect(()=>{
-    axios.get(`${BACKEND_URL}/holidays`)
-    .then((response) => {
-      const data = (response.data as THolidays[] || []).map<THolidays>((x)=>{
-        return {
-          date:x.date,
-          localName:x.localName,
-          name:x.name
-        }
-      });
+  console.log({state});
 
-      setState((prev)=>({...prev,holidays:data || null}))
-    }).catch(()=>{})
+  React.useEffect(()=>{
+    FetchRemindersWithingYearSpan({
+      onSuccess:(data)=>setState((prev)=>({...prev,reminders:data}))
+    })
+
+    if(!!storageHolidaysData.length){
+      setState((prev)=>({...prev,holidays:storageHolidaysData || []}));
+      return;
+    }
+   
+    FetchNationalHolidays({
+      onSuccess:(data)=> setState((prev)=>({...prev,holidays:data || []}))
+    });
   },[])
 
   return (
     <CalendarContainer>
         <div className="title">{Strings.title}</div>
         <Calendar
+         maxDetail='month'
+         defaultView='month'
          onChange={(val:Value)=> {
           setState((prev)=>({...prev,value:val}));
 

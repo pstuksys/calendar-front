@@ -7,4 +7,6 @@ READ ME FILE BEFORE STARTING:
 
 
 TODO:
-toast messages would be nice.
+1..
+2.caching reminders
+3.toast messages

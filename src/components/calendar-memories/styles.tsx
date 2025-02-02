@@ -65,5 +65,9 @@ export const styles = css`
             color:#fff;
         }
     }
+    /* comment this out for navigation through years/decades */
+    .react-calendar__navigation__label{
+        pointer-events: none
+    }
 
 `

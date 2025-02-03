@@ -43,6 +43,8 @@ const DefaultState:TState = {
   reminders:[]
 }
 
+
+
 const CalendarMemories = () => {
   const [state, setState] = React.useState<TState>(DefaultState);
 
@@ -51,21 +53,48 @@ const CalendarMemories = () => {
   const dispatch = useAppDispatch();
   const store = useAppSelector((st)=>st.modal);
 
-  const isHoliday = (date: Date): boolean => {
-    const dateString = format(date,'yyyy-MM-dd');
-    return state.holidays.some(holiday => holiday.date === dateString);
-  };
-
-  const formatDay = (_locale: string | undefined, date: Date) => {
-    const dateString = format(date,'yyyy-MM-dd');
-
-    if (isHoliday(date)) {
-      const holidayString = `${date.getDate()} - ${state.holidays.find((s)=>s.date === dateString)?.localName}`;
-      return `${holidayString}`
-    }
-
-    return `${date.getDate()}`;
-  };
+    const getRemindersForDate = (date: Date): TRemindersData[] => {
+      const dateString = format(date, 'yyyy-MM-dd');
+      return state.reminders.filter(reminder =>
+        format(new Date(reminder.date), 'yyyy-MM-dd') === dateString
+      );
+    };
+  
+    const getHolidaysForDate = (date: Date): THolidays[] => {
+      const dateString = format(date, 'yyyy-MM-dd');
+      return state.holidays.filter(holiday => holiday.date === dateString);
+    };
+  
+    const tileContent = ({ date, view }: { date: Date; view: string }) => {
+      if (view !== 'month') return null;
+  
+      const remindersForDay = getRemindersForDate(date);
+      const holidaysForDay = getHolidaysForDate(date);
+  
+      return (
+        <Container>
+          {remindersForDay.length > 0 && (
+            <div className='reminder'>
+              {remindersForDay.map((r, i) => (
+                <div key={`reminder-${r.id}`}>
+                  {r.name} ({r.time})
+                </div>
+              ))}
+            </div>
+          )}
+          {holidaysForDay.length > 0 && (
+            <div style={{ color: 'red' }}>
+              {holidaysForDay.map((h, i) => (
+                <div key={`holiday-${i}`}>
+                  {h.localName}
+                </div>
+              ))}
+            </div>
+          )}
+        </Container>
+      );
+    };
+  
 
   console.log({state});
 
@@ -100,7 +129,7 @@ const CalendarMemories = () => {
          defaultActiveStartDate={Today}
          maxDate={MaxDate}
          minDate={MinDate}
-         formatDay={formatDay}
+         tileContent={tileContent}
         />
     </CalendarContainer>
   )
@@ -110,4 +139,20 @@ export default CalendarMemories;
 
 const CalendarContainer = styled.div`
    ${styles}
+`
+
+const Container = styled.div`
+  text-align: center;
+  font-size: 1em;
+  margin:0.5em;
+
+.reminder{
+  font-family: Roboto;
+  ::-webkit-scrollbar {
+    display: none;
+}
+  :hover{
+    color:#7FFFD4;
+  }
+}
 `

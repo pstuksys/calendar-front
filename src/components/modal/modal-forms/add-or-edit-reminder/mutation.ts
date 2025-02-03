@@ -15,10 +15,11 @@ export const HandleAddOrUpdateReminder = (props:TData) => {
     
     try{
         const timeInLocal = dayjs(values.time).tz("Europe/Vilnius").format("HH:mm");
+        const dateInLocal = dayjs(values.date).tz("Europe/Vilnius").set('hour',20);
 
         if(!id){
             axios.post(`${BACKEND_URL}/reminders`,
-                {...values,time:timeInLocal})
+                {...values,time:timeInLocal,date:dateInLocal})
                 .then((_response)=>{
                   return onSuccess?.();
                 })
